@@ -1,0 +1,39 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+coverage
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+*.md
+!README.md
+
+.env*
+!.env.development
+!.env.e2e
+
+# personal agent tooling (not shared with the team)
+# CLAUDE.local.md / AGENTS.md already excluded by the *.md rule above
+.claude/
+.codex/
+.worktrees/
+temp/
