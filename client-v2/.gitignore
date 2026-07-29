@@ -35,5 +35,6 @@ coverage
 # CLAUDE.local.md / AGENTS.md already excluded by the *.md rule above
 .claude/
 .codex/
+.agents/
 .worktrees/
 temp/
