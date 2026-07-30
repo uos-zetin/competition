@@ -16,32 +16,39 @@ import {
   Textarea,
 } from "@/shared/ui";
 
-import { type CompetitionForm, CompetitionFormSchema } from "../model";
+import { type Competition, type CompetitionForm, CompetitionFormSchema } from "../model";
 import { competitionService } from "../model/competition-service";
 
-interface CompetitionCreateDialogProps {
+interface CompetitionFormDialogProps {
+  competition?: Competition;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-export function CompetitionCreateDialog({ open, onOpenChange }: CompetitionCreateDialogProps) {
+export function CompetitionFormDialog({ competition, open, onOpenChange }: CompetitionFormDialogProps) {
+  const isEditing = competition !== undefined;
   const form = useForm<CompetitionForm>({
     resolver: zodResolver(CompetitionFormSchema),
-    defaultValues: { name: "", description: "" },
+    defaultValues: competition ?? { name: "", description: "" },
   });
-  const description = form.watch("description");
+  const description = form.watch("description") ?? "";
 
   React.useEffect(() => {
-    if (open) form.reset({ name: "", description: "" });
-  }, [form, open]);
+    if (open) form.reset(competition ?? { name: "", description: "" });
+  }, [competition, form, open]);
 
   const onSubmit = async (value: CompetitionForm) => {
     try {
-      await competitionService.admin.create(value);
+      if (competition) await competitionService.admin.update({ ...competition, ...value });
+      else await competitionService.admin.create(value);
       form.reset();
       onOpenChange(false);
     } catch {
-      form.setError("root", { message: "대회를 생성하지 못했습니다. 다시 시도해주세요." });
+      form.setError("root", {
+        message: isEditing
+          ? "대회 정보를 저장하지 못했습니다. 다시 시도해주세요."
+          : "대회를 생성하지 못했습니다. 다시 시도해주세요.",
+      });
     }
   };
 
@@ -49,8 +56,10 @@ export function CompetitionCreateDialog({ open, onOpenChange }: CompetitionCreat
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>새 대회 생성</DialogTitle>
-          <DialogDescription>새로운 대회를 만들어주세요.</DialogDescription>
+          <DialogTitle>{isEditing ? "대회 수정" : "새 대회 생성"}</DialogTitle>
+          <DialogDescription>
+            {isEditing ? "대회 정보를 수정해주세요." : "새로운 대회를 만들어주세요."}
+          </DialogDescription>
         </DialogHeader>
         <form className="grid gap-3.5" onSubmit={(event) => void form.handleSubmit(onSubmit)(event)}>
           <div className="grid gap-1.5">
@@ -89,7 +98,7 @@ export function CompetitionCreateDialog({ open, onOpenChange }: CompetitionCreat
               취소
             </Button>
             <Button type="submit" disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting ? "생성 중..." : "생성"}
+              {form.formState.isSubmitting ? (isEditing ? "저장 중..." : "생성 중...") : isEditing ? "저장" : "생성"}
             </Button>
           </DialogFooter>
         </form>
