@@ -1,0 +1,27 @@
+import type { Division, DivisionFormValues } from "../model/types";
+
+export type DivisionStatusDto = "ready" | "ongoing" | "closed";
+
+export interface DivisionDto {
+  id: string;
+  competitionId: string;
+  name: string;
+  description: string;
+  createdAt: string;
+  status: DivisionStatusDto;
+  timeLimit: number;
+}
+
+export interface DivisionCreateDto {
+  name: string;
+  description: string;
+  timeLimit: number;
+}
+
+export interface DivisionRepository {
+  getAllDivisions(competitionId: string): Promise<Division[]>;
+  getDivisionById(divisionId: string): Promise<Division | null>;
+  createDivision(competitionId: string, form: DivisionFormValues): Promise<Division>;
+  updateDivision(division: Division): Promise<Division | null>;
+  deleteDivision(divisionId: string): Promise<void>;
+}
