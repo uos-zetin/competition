@@ -1,5 +1,6 @@
 import { SquarePen, Trash2 } from "lucide-react";
 
+import { formatCreatedAtLong } from "@/shared/lib";
 import { Button } from "@/shared/ui";
 
 import type { Competition } from "../model";
@@ -11,7 +12,7 @@ interface CompetitionCardProps {
 }
 
 export function CompetitionCard({ competition, onEdit, onDelete }: CompetitionCardProps) {
-  const createdAt = new Intl.DateTimeFormat("ko-KR", { dateStyle: "long" }).format(competition.createdAt);
+  const createdAt = formatCreatedAtLong(competition.createdAt);
   const hasDescription = competition.description.trim().length > 0;
 
   return (

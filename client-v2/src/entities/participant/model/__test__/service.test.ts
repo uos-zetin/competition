@@ -31,6 +31,7 @@ function createRepository(): ParticipantRepository {
     getParticipantsByDivision: vi.fn(),
     getParticipantById: vi.fn(),
     createParticipant: vi.fn(),
+    createParticipants: vi.fn(),
     updateParticipant: vi.fn(),
     deleteParticipant: vi.fn(),
   };
@@ -73,5 +74,22 @@ describe("createParticipantService", () => {
     expect(useParticipantStore.getState().participants).toEqual([updated]);
     await service.admin.remove(updated.id);
     expect(useParticipantStore.getState().participants).toEqual([]);
+  });
+
+  it("parses and stores every bulk-created participant", async () => {
+    const repository = createRepository();
+    const service = createParticipantService({ participantRepository: repository });
+    vi.mocked(repository.createParticipants).mockResolvedValue([first, second]);
+
+    await service.admin.createMany("division-a", [
+      { divisionId: "division-a", name: " 첫째 ", teamName: " 팀 ", robotName: " 로봇 ", comment: " ", orderRaw: 1 },
+      { divisionId: "division-a", name: " 둘째 ", teamName: " 팀 ", robotName: " 로봇 ", comment: " ", orderRaw: 2 },
+    ]);
+
+    expect(repository.createParticipants).toHaveBeenCalledWith("division-a", [
+      { divisionId: "division-a", name: "첫째", teamName: "팀", robotName: "로봇", comment: "", orderRaw: 1 },
+      { divisionId: "division-a", name: "둘째", teamName: "팀", robotName: "로봇", comment: "", orderRaw: 2 },
+    ]);
+    expect(useParticipantStore.getState().participants).toEqual([first, second]);
   });
 });

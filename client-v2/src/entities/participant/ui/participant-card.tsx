@@ -1,5 +1,6 @@
 import { SquarePen, Trash2 } from "lucide-react";
 
+import { formatCreatedAtLong } from "@/shared/lib";
 import { Button } from "@/shared/ui";
 
 import type { Participant } from "../model";
@@ -11,7 +12,7 @@ interface ParticipantCardProps {
 }
 
 export function ParticipantCard({ participant, onEdit, onDelete }: ParticipantCardProps) {
-  const createdAt = new Intl.DateTimeFormat("ko-KR", { dateStyle: "long" }).format(participant.createdAt);
+  const createdAt = formatCreatedAtLong(participant.createdAt);
   const hasComment = participant.comment.trim().length > 0;
 
   return (

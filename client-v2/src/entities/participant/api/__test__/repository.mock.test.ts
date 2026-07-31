@@ -27,4 +27,16 @@ describe("ParticipantMockRepository", () => {
     await expect(repository.getParticipantById(first.id)).resolves.toBeNull();
     await expect(repository.getParticipantById(second.id)).resolves.toEqual(second);
   });
+
+  it("creates participants in the requested division", async () => {
+    const repository = new ParticipantMockRepository();
+    const participants = await repository.createParticipants("division-new", [
+      { divisionId: "ignored", name: "첫째", teamName: "팀", robotName: "로봇", comment: "", orderRaw: 1 },
+      { divisionId: "ignored", name: "둘째", teamName: "팀", robotName: "로봇", comment: "", orderRaw: 2 },
+    ]);
+
+    expect(participants).toHaveLength(2);
+    expect(participants.every((participant) => participant.divisionId === "division-new")).toBe(true);
+    await expect(repository.getParticipantsByDivision("division-new")).resolves.toEqual(participants);
+  });
 });

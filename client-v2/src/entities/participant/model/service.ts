@@ -24,6 +24,14 @@ export function createParticipantService({ participantRepository }: { participan
         useParticipantStore.getState().add(participant);
         return participant;
       },
+      createMany: async (divisionId: string, forms: ParticipantForm[]): Promise<Participant[]> => {
+        const participants = await participantRepository.createParticipants(
+          divisionId,
+          forms.map((form) => ParticipantFormSchema.parse(form))
+        );
+        for (const participant of participants) useParticipantStore.getState().add(participant);
+        return participants;
+      },
       update: async (participant: Participant): Promise<Participant> => {
         const form = ParticipantFormSchema.parse(participant);
         const updatedParticipant = await participantRepository.updateParticipant({ ...participant, ...form });

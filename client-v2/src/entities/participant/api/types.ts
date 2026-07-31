@@ -17,6 +17,7 @@ export interface ParticipantRepository {
   getParticipantsByDivision(divisionId: string): Promise<Participant[]>;
   getParticipantById(participantId: string): Promise<Participant | null>;
   createParticipant(form: ParticipantForm): Promise<Participant>;
+  createParticipants(divisionId: string, forms: ParticipantForm[]): Promise<Participant[]>;
   updateParticipant(participant: Participant): Promise<Participant>;
   deleteParticipant(participantId: string): Promise<void>;
 }
