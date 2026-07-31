@@ -31,6 +31,13 @@ export class ParticipantRestRepository implements ParticipantRepository {
     return parseParticipantDto(response.data);
   }
 
+  async createParticipants(divisionId: string, forms: ParticipantForm[]): Promise<Participant[]> {
+    const response = await this.authenticatedFetcher.post<ParticipantDto[]>(`/divisions/${divisionId}/participants/bulk`, {
+      body: { participants: forms.map(parseParticipantForm) },
+    });
+    return response.data.map(parseParticipantDto);
+  }
+
   async updateParticipant(participant: Participant): Promise<Participant> {
     const response = await this.authenticatedFetcher.patch<ParticipantDto>(`/participants/${participant.id}`, {
       body: parseParticipantForm(participant),

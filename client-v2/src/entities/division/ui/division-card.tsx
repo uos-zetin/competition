@@ -1,5 +1,6 @@
 import { SquarePen, Trash2 } from "lucide-react";
 
+import { formatCreatedAtLong } from "@/shared/lib";
 import { Button } from "@/shared/ui";
 
 import { formatTimeLimit } from "../lib/format";
@@ -14,7 +15,7 @@ interface DivisionCardProps {
 }
 
 export function DivisionCard({ division, onEdit, onDelete }: DivisionCardProps) {
-  const createdAt = new Intl.DateTimeFormat("ko-KR", { dateStyle: "long" }).format(division.createdAt);
+  const createdAt = formatCreatedAtLong(division.createdAt);
   const hasDescription = division.description.trim().length > 0;
 
   return (

@@ -1,11 +1,9 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
-import type { ManualRecordStore } from "./types";
+import { sortByCreatedAtAsc } from "@/shared/lib";
 
-function sortByCreatedAtAsc(manualRecords: { createdAt: Date }[]) {
-  manualRecords.sort((left, right) => left.createdAt.getTime() - right.createdAt.getTime());
-}
+import type { ManualRecordStore } from "./types";
 
 export const useManualRecordStore = create<ManualRecordStore>()(
   immer((set) => ({
@@ -14,13 +12,13 @@ export const useManualRecordStore = create<ManualRecordStore>()(
       set((state) => {
         state.manualRecords = state.manualRecords.filter((manualRecord) => manualRecord.participantId !== participantId);
         state.manualRecords.push(...manualRecords);
-        sortByCreatedAtAsc(state.manualRecords);
+        state.manualRecords.sort(sortByCreatedAtAsc);
       }),
     add: (manualRecord) =>
       set((state) => {
         state.manualRecords = state.manualRecords.filter((item) => item.id !== manualRecord.id);
         state.manualRecords.push(manualRecord);
-        sortByCreatedAtAsc(state.manualRecords);
+        state.manualRecords.sort(sortByCreatedAtAsc);
       }),
     removeByParticipant: (participantId) =>
       set((state) => {

@@ -52,6 +52,17 @@ export class ParticipantMockRepository implements ParticipantRepository {
     return participant;
   }
 
+  async createParticipants(divisionId: string, forms: ParticipantForm[]): Promise<Participant[]> {
+    const participants = forms.map((form) => ({
+      id: crypto.randomUUID(),
+      ...form,
+      divisionId,
+      createdAt: new Date(),
+    }));
+    this.participants.push(...participants);
+    return participants;
+  }
+
   async updateParticipant(participant: Participant): Promise<Participant> {
     const index = this.participants.findIndex((item) => item.id === participant.id);
     if (index !== -1) this.participants[index] = participant;
