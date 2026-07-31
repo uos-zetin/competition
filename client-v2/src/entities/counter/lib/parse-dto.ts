@@ -1,0 +1,12 @@
+import type { CounterDto } from "../api/types";
+import type { CounterState } from "../model/types";
+
+export function parseCounterDto(dto: CounterDto): CounterState {
+  return {
+    id: dto.deviceId,
+    name: dto.name,
+    startedAt: dto.startedAt ?? null,
+    stoppedAt: dto.stoppedAt ?? null,
+    divisionId: dto.divisionId ?? null,
+  };
+}
