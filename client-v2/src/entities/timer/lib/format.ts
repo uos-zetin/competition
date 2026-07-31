@@ -1,4 +1,4 @@
-export function formatElapsedMs(ms: number): string {
+export function formatMsToTime(ms: number): string {
   const clamped = Math.max(0, ms);
   const totalSeconds = Math.floor(clamped / 1000);
   const minutes = Math.floor(totalSeconds / 60);
