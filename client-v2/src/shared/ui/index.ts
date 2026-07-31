@@ -15,3 +15,5 @@ export { Input } from "./input";
 export { Label } from "./label";
 export { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select";
 export { Textarea } from "./textarea";
+export { TimeDisplay } from "./time-display";
+export type { TimeDisplayProps } from "./time-display";
