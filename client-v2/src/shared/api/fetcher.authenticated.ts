@@ -1,11 +1,5 @@
+import { sessionStore } from "./session";
 import type { ApiResponse, Fetcher, HttpMethod, RequestOptions } from "./types";
-
-/**
- * 세션 키 공급자 인터페이스
- */
-export interface SessionProvider {
-  getSessionKey(): string | null;
-}
 
 /**
  * 인증이 필요한 요청을 처리하는 Fetcher 래퍼
@@ -13,18 +7,9 @@ export interface SessionProvider {
  */
 export class AuthenticatedFetcher implements Fetcher {
   private readonly baseFetcher: Fetcher;
-  private sessionProvider: SessionProvider | null;
 
-  constructor(baseFetcher: Fetcher, sessionProvider?: SessionProvider) {
+  constructor(baseFetcher: Fetcher) {
     this.baseFetcher = baseFetcher;
-    this.sessionProvider = sessionProvider || null;
-  }
-
-  /**
-   * SessionProvider를 설정합니다.
-   */
-  setSessionProvider(sessionProvider: SessionProvider): void {
-    this.sessionProvider = sessionProvider;
   }
 
   async get<T = unknown>(url: string, options?: Omit<RequestOptions, "body">): Promise<ApiResponse<T>> {
@@ -48,7 +33,7 @@ export class AuthenticatedFetcher implements Fetcher {
   }
 
   async request<T = unknown>(method: HttpMethod, url: string, options?: RequestOptions): Promise<ApiResponse<T>> {
-    const sessionKey = this.sessionProvider?.getSessionKey();
+    const sessionKey = sessionStore.getSessionKey();
     const headers: Record<string, string> = { ...options?.headers };
 
     if (sessionKey) {
