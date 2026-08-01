@@ -77,4 +77,15 @@ describe("createCounterService", () => {
     });
     expect(result.current).toBe(true);
   });
+
+  it("returns a stable stopwatch snapshot and updates it from the store", () => {
+    const service = createCounterService({ counterRepository: createRepository(), counterChannel: createChannel() });
+    const { result } = renderHook(() => service.use.stopwatch("counter-1"));
+
+    expect(result.current).toEqual({ startedAt: null, stoppedAt: null });
+    act(() => useCounterStore.getState().add({ ...counter, startedAt: 100 }));
+    expect(result.current).toMatchObject({ startedAt: 100, stoppedAt: null });
+    act(() => useCounterStore.getState().stop("counter-1", 200));
+    expect(result.current).toMatchObject({ startedAt: 100, stoppedAt: 200 });
+  });
 });

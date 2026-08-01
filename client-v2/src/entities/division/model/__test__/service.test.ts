@@ -43,6 +43,16 @@ describe("createDivisionService", () => {
     expect(useDivisionStore.getState().divisions).toEqual([newest, oldest]);
   });
 
+  it("loads a division by id and adds it to the store", async () => {
+    const repository = createRepository();
+    vi.mocked(repository.getDivisionById).mockResolvedValue(newest);
+
+    await expect(createDivisionService({ divisionRepository: repository }).loadById(newest.id)).resolves.toEqual(newest);
+
+    expect(repository.getDivisionById).toHaveBeenCalledWith(newest.id);
+    expect(useDivisionStore.getState().divisions).toEqual([newest]);
+  });
+
   it("creates, updates, and removes the matching store item", async () => {
     const repository = createRepository();
     const service = createDivisionService({ divisionRepository: repository });
