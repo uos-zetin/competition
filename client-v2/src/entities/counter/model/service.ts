@@ -4,6 +4,8 @@ import { parseCounterDto } from "../lib/parse-dto";
 import { useCounterStore } from "./store.zustand";
 import type { CounterState } from "./types";
 
+const idleStopwatch = { startedAt: null, stoppedAt: null } as const;
+
 export function createCounterService({
   counterRepository,
   counterChannel,
@@ -32,10 +34,7 @@ export function createCounterService({
   const useIsConnected = (counterId: string): boolean =>
     useCounterStore((state) => state.counters.some((counter) => counter.id === counterId));
   const useStopwatch = (counterId: string): Pick<CounterState, "startedAt" | "stoppedAt"> =>
-    useCounterStore((state) => {
-      const counter = state.counters.find((item) => item.id === counterId);
-      return { startedAt: counter?.startedAt ?? null, stoppedAt: counter?.stoppedAt ?? null };
-    });
+    useCounterStore((state) => state.counters.find((counter) => counter.id === counterId) ?? idleStopwatch);
 
   return {
     load: {

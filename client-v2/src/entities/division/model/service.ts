@@ -14,6 +14,11 @@ export function createDivisionService({ divisionRepository }: { divisionReposito
       const divisions = await divisionRepository.getAllDivisions(competitionId);
       useDivisionStore.getState().init(divisions);
     },
+    loadById: async (divisionId: string): Promise<Division | null> => {
+      const division = await divisionRepository.getDivisionById(divisionId);
+      if (division) useDivisionStore.getState().add(division);
+      return division;
+    },
     admin: {
       create: async (competitionId: string, form: DivisionFormValues): Promise<Division> => {
         const division = await divisionRepository.createDivision(competitionId, DivisionFormSchema.parse(form));
