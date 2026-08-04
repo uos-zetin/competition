@@ -66,4 +66,21 @@ describe("createSocketChannel", () => {
     lastSocket()?.emit("connect");
     return connection;
   });
+
+  it("logs disconnects and errors without changing the connection lifecycle", async () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
+    const channel = createSocketChannel({ url: "/socket", queryKey: "id", getSessionKey: () => null, parseMessage: (raw) => raw });
+    const connection = channel.connect("one");
+    lastSocket()?.emit("connect");
+    await connection;
+
+    lastSocket()?.emit("disconnect", "transport close");
+    const error = new Error("boom");
+    lastSocket()?.emit("error", error);
+
+    expect(warn).toHaveBeenCalledWith("Socket disconnected:", "transport close");
+    expect(warn).toHaveBeenCalledWith("Socket error:", error);
+    expect(lastSocket()?.disconnect).not.toHaveBeenCalled();
+    warn.mockRestore();
+  });
 });

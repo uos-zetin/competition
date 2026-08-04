@@ -19,13 +19,8 @@ export class ParticipantRestRepository implements ParticipantRepository {
     return response.data.map(parseParticipantDto);
   }
 
-  async getParticipantById(participantId: string): Promise<Participant | null> {
-    const response = await this.publicFetcher.get<ParticipantDto>(`/participants/${participantId}`);
-    return response.data ? parseParticipantDto(response.data) : null;
-  }
-
   async createParticipant(form: ParticipantForm): Promise<Participant> {
-    const response = await this.authenticatedFetcher.post<ParticipantDto>("/participants", {
+    const response = await this.authenticatedFetcher.post<ParticipantDto>(`/divisions/${form.divisionId}/participants`, {
       body: parseParticipantForm(form),
     });
     return parseParticipantDto(response.data);

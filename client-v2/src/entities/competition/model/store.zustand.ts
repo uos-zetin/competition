@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
-import { sortByCreatedAtDesc } from "@/shared/lib";
+import { removeById, sortByCreatedAtDesc, upsertSorted } from "@/shared/lib";
 
 import type { CompetitionStore } from "./types";
 
@@ -14,21 +14,16 @@ export const useCompetitionStore = create<CompetitionStore>()(
       }),
     add: (competition) =>
       set((state) => {
-        state.competitions = state.competitions.filter((item) => item.id !== competition.id);
-        state.competitions.push(competition);
-        state.competitions.sort(sortByCreatedAtDesc);
+        state.competitions = upsertSorted(state.competitions, competition, sortByCreatedAtDesc);
       }),
     update: (competition) =>
       set((state) => {
-        const index = state.competitions.findIndex((item) => item.id === competition.id);
-        if (index !== -1) {
-          state.competitions[index] = competition;
-          state.competitions.sort(sortByCreatedAtDesc);
-        }
+        if (!state.competitions.some((item) => item.id === competition.id)) return;
+        state.competitions = upsertSorted(state.competitions, competition, sortByCreatedAtDesc);
       }),
     remove: (competitionId) =>
       set((state) => {
-        state.competitions = state.competitions.filter((item) => item.id !== competitionId);
+        state.competitions = removeById(state.competitions, competitionId);
       }),
     clearAll: () =>
       set((state) => {

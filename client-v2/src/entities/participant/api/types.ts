@@ -11,11 +11,10 @@ export interface ParticipantDto {
   createdAt: string;
 }
 
-export type ParticipantCreateDto = ParticipantForm;
+export type ParticipantCreateDto = Omit<ParticipantForm, "divisionId">;
 
 export interface ParticipantRepository {
   getParticipantsByDivision(divisionId: string): Promise<Participant[]>;
-  getParticipantById(participantId: string): Promise<Participant | null>;
   createParticipant(form: ParticipantForm): Promise<Participant>;
   createParticipants(divisionId: string, forms: ParticipantForm[]): Promise<Participant[]>;
   updateParticipant(participant: Participant): Promise<Participant>;

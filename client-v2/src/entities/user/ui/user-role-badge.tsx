@@ -1,4 +1,5 @@
 import { cn } from "@/shared/lib";
+import { Badge } from "@/shared/ui";
 
 import { getUserRoleLabel } from "../lib/format";
 import type { UserRole } from "../model";
@@ -23,14 +24,9 @@ export function UserRoleBadge({ role }: UserRoleBadgeProps) {
   const isEmpty = role === undefined;
 
   return (
-    <span
-      className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-semibold",
-        isEmpty ? "border-border bg-secondary text-secondary-foreground" : roleClassNames[role]
-      )}
-    >
+    <Badge className={isEmpty ? "border-border bg-secondary text-secondary-foreground" : roleClassNames[role]}>
       <span className={cn("size-1.5 rounded-full", isEmpty ? "bg-muted-foreground" : roleDotClassNames[role])} />
       {isEmpty ? "역할 없음" : getUserRoleLabel(role)}
-    </span>
+    </Badge>
   );
 }

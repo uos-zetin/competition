@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
-import { sortByCreatedAtAsc } from "@/shared/lib";
+import { sortByCreatedAtAsc, upsertSorted } from "@/shared/lib";
 
 import type { ManualRecordStore } from "./types";
 
@@ -16,9 +16,7 @@ export const useManualRecordStore = create<ManualRecordStore>()(
       }),
     add: (manualRecord) =>
       set((state) => {
-        state.manualRecords = state.manualRecords.filter((item) => item.id !== manualRecord.id);
-        state.manualRecords.push(manualRecord);
-        state.manualRecords.sort(sortByCreatedAtAsc);
+        state.manualRecords = upsertSorted(state.manualRecords, manualRecord, sortByCreatedAtAsc);
       }),
     removeByParticipant: (participantId) =>
       set((state) => {

@@ -1,4 +1,4 @@
-import { cn } from "@/shared/lib";
+import { Badge } from "@/shared/ui";
 
 import { getRecordSourceLabel } from "../lib/format";
 import type { RecordSource } from "../model";
@@ -15,13 +15,8 @@ const sourceClassNames: Record<RecordSource, string> = {
 
 export function RecordSourceBadge({ source }: RecordSourceBadgeProps) {
   return (
-    <span
-      className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-semibold",
-        sourceClassNames[source]
-      )}
-    >
+    <Badge className={sourceClassNames[source]}>
       {getRecordSourceLabel(source)}
-    </span>
+    </Badge>
   );
 }

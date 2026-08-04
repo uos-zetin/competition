@@ -71,6 +71,17 @@ describe("createAuthService", () => {
     expect(useAuthStore.getState()).toMatchObject({ user: null, isAuthenticated: false, sessionKey: null });
   });
 
+  it("clears an expired session without validating the current user", async () => {
+    const repository = createRepository();
+    useAuthStore.getState().setAuth(kim, "expired-session");
+    useAuthStore.setState({ sessionExpiresAt: Date.now() - 1 });
+
+    await expect(createAuthService({ authRepository: repository }).auth.restoreSession()).resolves.toBeNull();
+
+    expect(useAuthStore.getState()).toMatchObject({ user: null, isAuthenticated: false, sessionKey: null, sessionExpiresAt: null });
+    expect(userService.load.currentUser).not.toHaveBeenCalled();
+  });
+
   it("switches mock users without invoking the repository", () => {
     const repository = createRepository();
 

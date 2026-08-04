@@ -29,7 +29,6 @@ const anotherDivision = { ...first, id: "other", divisionId: "division-b", order
 function createRepository(): ParticipantRepository {
   return {
     getParticipantsByDivision: vi.fn(),
-    getParticipantById: vi.fn(),
     createParticipant: vi.fn(),
     createParticipants: vi.fn(),
     updateParticipant: vi.fn(),

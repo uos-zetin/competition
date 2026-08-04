@@ -1,3 +1,5 @@
+import { useShallow } from "zustand/react/shallow";
+
 import type { DivisionRepository } from "../api/types";
 
 import { DivisionFormSchema } from "./schema";
@@ -8,11 +10,19 @@ export function createDivisionService({ divisionRepository }: { divisionReposito
   const useDivisions = (): Division[] => useDivisionStore((state) => state.divisions);
   const useDivisionById = (divisionId: string): Division | undefined =>
     useDivisionStore((state) => state.divisions.find((division) => division.id === divisionId));
+  const useDivisionsByCompetition = (competitionId: string): Division[] =>
+    useDivisionStore(
+      useShallow((state) =>
+        state.divisions
+          .filter((division) => division.competitionId === competitionId)
+          .sort((a, b) => a.name.localeCompare(b.name))
+      )
+    );
 
   return {
     load: async (competitionId: string): Promise<void> => {
       const divisions = await divisionRepository.getAllDivisions(competitionId);
-      useDivisionStore.getState().init(divisions);
+      useDivisionStore.getState().setByCompetition(competitionId, divisions);
     },
     loadById: async (divisionId: string): Promise<Division | null> => {
       const division = await divisionRepository.getDivisionById(divisionId);
@@ -40,6 +50,7 @@ export function createDivisionService({ divisionRepository }: { divisionReposito
     use: {
       divisions: useDivisions,
       divisionById: useDivisionById,
+      divisionsByCompetition: useDivisionsByCompetition,
     },
   };
 }

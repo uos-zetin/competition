@@ -36,8 +36,12 @@ export function createAuthService({ authRepository }: { authRepository: AuthRepo
         }
       },
       restoreSession: async (): Promise<User | null> => {
-        const { sessionKey } = useAuthStore.getState();
+        const { sessionKey, sessionExpiresAt } = useAuthStore.getState();
         if (!sessionKey) return null;
+        if (sessionExpiresAt !== null && Date.now() > sessionExpiresAt) {
+          useAuthStore.getState().clearAuth();
+          return null;
+        }
         try {
           const user = await userService.load.currentUser();
           if (!user) throw new Error("현재 사용자를 찾을 수 없습니다.");

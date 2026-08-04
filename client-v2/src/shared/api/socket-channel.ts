@@ -58,6 +58,12 @@ export function createSocketChannel<TMessage>({
         pendingReject = null;
         reject(error);
       });
+      nextSocket.on("disconnect", (reason: string) => {
+        console.warn("Socket disconnected:", reason);
+      });
+      nextSocket.on("error", (error: unknown) => {
+        console.warn("Socket error:", error);
+      });
       nextSocket.on("message", (raw: unknown) => {
         const message = parseMessage(raw);
         handlers.forEach((handler) => handler(message));
