@@ -42,10 +42,6 @@ export class ParticipantMockRepository implements ParticipantRepository {
     return this.participants.filter((participant) => participant.divisionId === divisionId);
   }
 
-  async getParticipantById(participantId: string): Promise<Participant | null> {
-    return this.participants.find((participant) => participant.id === participantId) ?? null;
-  }
-
   async createParticipant(form: ParticipantForm): Promise<Participant> {
     const participant: Participant = { id: crypto.randomUUID(), ...form, createdAt: new Date() };
     this.participants.push(participant);

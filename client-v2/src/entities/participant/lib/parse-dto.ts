@@ -6,5 +6,6 @@ export function parseParticipantDto(dto: ParticipantDto): Participant {
 }
 
 export function parseParticipantForm(form: ParticipantForm): ParticipantCreateDto {
-  return { ...form };
+  const { name, teamName, robotName, comment, orderRaw } = form;
+  return { name, teamName, robotName, comment, orderRaw };
 }

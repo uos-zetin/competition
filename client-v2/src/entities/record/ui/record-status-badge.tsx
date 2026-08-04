@@ -1,4 +1,4 @@
-import { cn } from "@/shared/lib";
+import { Badge } from "@/shared/ui";
 
 import { getRecordStatusLabel } from "../lib/format";
 import type { RecordStatus } from "../model";
@@ -15,13 +15,8 @@ const statusClassNames: Record<RecordStatus, string> = {
 
 export function RecordStatusBadge({ status }: RecordStatusBadgeProps) {
   return (
-    <span
-      className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-semibold",
-        statusClassNames[status]
-      )}
-    >
+    <Badge className={statusClassNames[status]}>
       {getRecordStatusLabel(status)}
-    </span>
+    </Badge>
   );
 }

@@ -1,3 +1,4 @@
+import { act, renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { DivisionRepository } from "../../api/types";
@@ -41,6 +42,33 @@ describe("createDivisionService", () => {
     vi.mocked(repository.getAllDivisions).mockResolvedValue([oldest, newest]);
     await createDivisionService({ divisionRepository: repository }).load("competition-1");
     expect(useDivisionStore.getState().divisions).toEqual([newest, oldest]);
+  });
+
+  it("retains another competition while replacing the loaded competition's divisions", async () => {
+    const repository = createRepository();
+    const anotherCompetition = { ...oldest, id: "other", competitionId: "competition-2" };
+    useDivisionStore.getState().add(anotherCompetition);
+    vi.mocked(repository.getAllDivisions).mockResolvedValue([oldest, newest]);
+
+    await createDivisionService({ divisionRepository: repository }).load("competition-1");
+
+    expect(useDivisionStore.getState().divisions).toEqual([newest, anotherCompetition, oldest]);
+  });
+
+  it("selects only a competition's divisions sorted by name", () => {
+    const service = createDivisionService({ divisionRepository: createRepository() });
+    const alphabeticallyFirst = { ...oldest, id: "first", name: "가 부문" };
+    const alphabeticallyLast = { ...newest, id: "last", name: "하 부문" };
+    const otherCompetition = { ...oldest, id: "other", competitionId: "competition-2", name: "나 부문" };
+    const { result } = renderHook(() => service.use.divisionsByCompetition("competition-1"));
+
+    act(() => {
+      useDivisionStore.getState().add(alphabeticallyLast);
+      useDivisionStore.getState().add(otherCompetition);
+      useDivisionStore.getState().add(alphabeticallyFirst);
+    });
+
+    expect(result.current).toEqual([alphabeticallyFirst, alphabeticallyLast]);
   });
 
   it("loads a division by id and adds it to the store", async () => {

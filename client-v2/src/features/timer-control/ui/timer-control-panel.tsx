@@ -6,7 +6,7 @@ import { Button, Input, TimeDisplay } from "@/shared/ui";
 import { formatMsToTime, getStatus, integrateLogs, useCountdownTimer } from "@/entities/timer";
 // Error handling is the architecture's designated cross-cutting feature exception.
 // eslint-disable-next-line fsd/forbidden-imports, fsd/no-cross-slice-dependency
-import { errorHandlingService } from "@/features/error-handling/model";
+import { errorHandlingService } from "@/features/error-handling";
 
 import { timerControlService } from "../model";
 

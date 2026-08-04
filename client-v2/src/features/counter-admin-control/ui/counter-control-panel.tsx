@@ -7,7 +7,7 @@ import { ConnectionStatusBadge } from "@/entities/counter";
 import { DivisionStatusBadge } from "@/entities/division";
 // Error handling is the architecture's designated cross-cutting feature exception.
 // eslint-disable-next-line fsd/forbidden-imports, fsd/no-cross-slice-dependency
-import { errorHandlingService } from "@/features/error-handling/model";
+import { errorHandlingService } from "@/features/error-handling";
 
 import { counterAdminControlService } from "../model";
 

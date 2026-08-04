@@ -17,6 +17,7 @@ export type DivisionFormValues = Pick<Division, "name" | "description" | "timeLi
 export interface DivisionStore {
   divisions: Division[];
   init: (divisions: Division[]) => void;
+  setByCompetition: (competitionId: string, divisions: Division[]) => void;
   add: (division: Division) => void;
   update: (division: Division) => void;
   remove: (divisionId: string) => void;

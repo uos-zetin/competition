@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
-import { sortByCreatedAtDesc } from "@/shared/lib";
+import { removeById, sortByCreatedAtDesc, upsertSorted } from "@/shared/lib";
 
 import type { RecordStore } from "./types";
 
@@ -21,21 +21,16 @@ export const useRecordStore = create<RecordStore>()(
       }),
     add: (record) =>
       set((state) => {
-        state.records = state.records.filter((item) => item.id !== record.id);
-        state.records.push(record);
-        state.records.sort(sortByCreatedAtDesc);
+        state.records = upsertSorted(state.records, record, sortByCreatedAtDesc);
       }),
     update: (record) =>
       set((state) => {
-        const index = state.records.findIndex((item) => item.id === record.id);
-        if (index !== -1) {
-          state.records[index] = record;
-          state.records.sort(sortByCreatedAtDesc);
-        }
+        if (!state.records.some((item) => item.id === record.id)) return;
+        state.records = upsertSorted(state.records, record, sortByCreatedAtDesc);
       }),
     remove: (recordId) =>
       set((state) => {
-        state.records = state.records.filter((record) => record.id !== recordId);
+        state.records = removeById(state.records, recordId);
       }),
     clearAll: () =>
       set((state) => {

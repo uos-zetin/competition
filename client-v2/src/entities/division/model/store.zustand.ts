@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
-import { sortByCreatedAtDesc } from "@/shared/lib";
+import { removeById, sortByCreatedAtDesc, upsertSorted } from "@/shared/lib";
 
 import type { DivisionStore } from "./types";
 
@@ -12,23 +12,24 @@ export const useDivisionStore = create<DivisionStore>()(
       set((state) => {
         state.divisions = [...divisions].sort(sortByCreatedAtDesc);
       }),
+    setByCompetition: (competitionId, divisions) =>
+      set((state) => {
+        state.divisions = state.divisions.filter((division) => division.competitionId !== competitionId);
+        state.divisions.push(...divisions);
+        state.divisions.sort(sortByCreatedAtDesc);
+      }),
     add: (division) =>
       set((state) => {
-        state.divisions = state.divisions.filter((item) => item.id !== division.id);
-        state.divisions.push(division);
-        state.divisions.sort(sortByCreatedAtDesc);
+        state.divisions = upsertSorted(state.divisions, division, sortByCreatedAtDesc);
       }),
     update: (division) =>
       set((state) => {
-        const index = state.divisions.findIndex((item) => item.id === division.id);
-        if (index !== -1) {
-          state.divisions[index] = division;
-          state.divisions.sort(sortByCreatedAtDesc);
-        }
+        if (!state.divisions.some((item) => item.id === division.id)) return;
+        state.divisions = upsertSorted(state.divisions, division, sortByCreatedAtDesc);
       }),
     remove: (divisionId) =>
       set((state) => {
-        state.divisions = state.divisions.filter((item) => item.id !== divisionId);
+        state.divisions = removeById(state.divisions, divisionId);
       }),
     clearAll: () =>
       set((state) => {

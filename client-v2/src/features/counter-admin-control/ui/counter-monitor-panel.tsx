@@ -6,7 +6,7 @@ import { Button, ConfirmDialog, TimeDisplay } from "@/shared/ui";
 import { formatElapsedMs, isRunning, useStopwatchTimer } from "@/entities/counter";
 // Error handling is the architecture's designated cross-cutting feature exception.
 // eslint-disable-next-line fsd/forbidden-imports, fsd/no-cross-slice-dependency
-import { errorHandlingService } from "@/features/error-handling/model";
+import { errorHandlingService } from "@/features/error-handling";
 
 import { counterAdminControlService } from "../model";
 

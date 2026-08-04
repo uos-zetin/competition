@@ -1,4 +1,4 @@
-import { cn } from "@/shared/lib";
+import { Badge } from "@/shared/ui";
 
 import { getDivisionStatusLabel } from "../lib/format";
 import type { DivisionStatus } from "../model";
@@ -15,16 +15,11 @@ const statusClassNames: Record<DivisionStatus, string> = {
 
 export function DivisionStatusBadge({ status }: DivisionStatusBadgeProps) {
   return (
-    <span
-      className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-semibold",
-        statusClassNames[status]
-      )}
-    >
+    <Badge className={statusClassNames[status]}>
       {status === "ongoing" ? (
         <span className="size-1.5 animate-pulse rounded-full bg-emerald-500 motion-reduce:animate-none" />
       ) : null}
       {getDivisionStatusLabel(status)}
-    </span>
+    </Badge>
   );
 }

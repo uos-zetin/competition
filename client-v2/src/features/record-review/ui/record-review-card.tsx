@@ -7,7 +7,7 @@ import { Button, Textarea } from "@/shared/ui";
 import { getRecordStatusLabel, type Record as RecordEntity, recordService, RecordSourceBadge, type RecordStatus,RecordStatusBadge } from "@/entities/record";
 // Error handling is the architecture's designated cross-cutting feature exception.
 // eslint-disable-next-line fsd/forbidden-imports, fsd/no-cross-slice-dependency
-import { errorHandlingService } from "@/features/error-handling/model";
+import { errorHandlingService } from "@/features/error-handling";
 
 interface RecordReviewCardProps {
   record: RecordEntity;

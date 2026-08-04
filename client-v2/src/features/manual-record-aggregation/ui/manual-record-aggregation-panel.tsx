@@ -7,7 +7,7 @@ import { Button, ConfirmDialog } from "@/shared/ui";
 import { manualRecordService } from "@/entities/manual-record";
 // Error handling is the architecture's designated cross-cutting feature exception.
 // eslint-disable-next-line fsd/forbidden-imports, fsd/no-cross-slice-dependency
-import { errorHandlingService } from "@/features/error-handling/model";
+import { errorHandlingService } from "@/features/error-handling";
 
 import { aggregateManualRecords } from "../lib/aggregate-manual-records";
 import { manualRecordAggregationService } from "../model";

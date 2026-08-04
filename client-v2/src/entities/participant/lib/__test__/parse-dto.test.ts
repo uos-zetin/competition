@@ -38,7 +38,6 @@ describe("participant DTO parsers", () => {
         orderRaw: 1,
       })
     ).toEqual({
-      divisionId: "division-1",
       name: "참가자",
       teamName: "팀",
       robotName: "로봇",
