@@ -110,7 +110,7 @@ export function RecordReviewCard({ record, participantName }: RecordReviewCardPr
     <article className="flex flex-col gap-3 rounded-lg border bg-card p-3">
       {participantName ? <p className="text-xs font-semibold">{participantName}</p> : null}
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <span className="font-mono text-lg font-bold tracking-tight">{formatMsToClock(record.value)}</span>
+        <span className="text-lg font-bold tracking-tight tabular-nums">{formatMsToClock(record.value)}</span>
         <div className="flex items-center gap-1.5">
           <RecordStatusBadge status={record.status} />
           <RecordSourceBadge source={record.source} />

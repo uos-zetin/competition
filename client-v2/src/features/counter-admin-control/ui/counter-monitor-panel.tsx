@@ -81,7 +81,7 @@ function TimeMark({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-lg border bg-muted px-2.5 py-2">
       <p className="mb-0.5 text-[0.65rem] font-semibold text-muted-foreground">{label}</p>
-      <p className="font-mono text-xs">{value}</p>
+      <p className="text-xs tabular-nums">{value}</p>
     </div>
   );
 }

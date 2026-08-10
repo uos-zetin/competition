@@ -94,9 +94,9 @@ export function ManualRecordAggregationPanel({ participantId }: ManualRecordAggr
           <div className="flex max-h-42 flex-col gap-1.5 overflow-y-auto pr-0.5">
             {manualRecords.map((manualRecord) => {
               const checked = selectedIds.has(manualRecord.id);
-              const contributing = result?.contributingRecordIds.includes(manualRecord.id) ?? false;
+              const selected = checked;
               return (
-                <label key={manualRecord.id} className={cn("flex cursor-pointer items-center gap-2 rounded-lg border border-transparent px-2 py-1.5", contributing && "border-blue-500/30 bg-blue-500/10", isRegistering && "cursor-not-allowed")}>
+                <label key={manualRecord.id} className={cn("flex cursor-pointer items-center gap-2 rounded-lg border border-transparent px-2 py-1.5", selected && "border-blue-500/30 bg-blue-500/10", isRegistering && "cursor-not-allowed")}>
                   <span className="relative size-4 shrink-0">
                     <input
                       type="checkbox"
@@ -108,7 +108,7 @@ export function ManualRecordAggregationPanel({ participantId }: ManualRecordAggr
                     {checked ? <Check className="pointer-events-none absolute inset-0 size-4 text-primary-foreground" strokeWidth={3} aria-hidden="true" /> : null}
                   </span>
                   <span className="min-w-0">
-                    <span className="block font-mono text-sm font-bold tabular-nums">{formatMsToClock(manualRecord.value)}</span>
+                    <span className="block text-sm font-bold tabular-nums">{formatMsToClock(manualRecord.value)}</span>
                     <span className="flex gap-1 text-[11px] text-muted-foreground">
                       {manualRecord.recorderName}<span className="text-border">·</span>{formatRelativeTimeKo(manualRecord.createdAt)}
                     </span>
@@ -125,8 +125,8 @@ export function ManualRecordAggregationPanel({ participantId }: ManualRecordAggr
                   {result.mode === "median" ? "중간값" : "평균값"}
                 </span>
               </div>
-              <p className="font-mono text-2xl font-bold tracking-tight tabular-nums">{formatMsToClock(result.value)}</p>
-              <p className="rounded-md border bg-muted/50 px-2.5 py-2 font-mono text-xs leading-5 text-muted-foreground">
+              <p className="text-2xl font-bold tracking-tight tabular-nums">{formatMsToClock(result.value)}</p>
+              <p className="rounded-md border bg-muted/50 px-2.5 py-2 text-xs leading-5 text-muted-foreground tabular-nums">
                 <b className="font-sans text-foreground">정렬 {result.sortedValues.length}개</b> {result.sortedValues.map(formatMsToClock).join(" · ")} → {result.mode === "median" ? "가운데 값 사용" : `가운데 두 값 (${result.contributingValues.map(formatMsToClock).join(" + ")}) ÷ 2`}
               </p>
               <Button type="button" disabled={isRegistering} onClick={() => void handleRegister()}>
