@@ -16,7 +16,7 @@ export interface CounterAdminControlDeps {
     };
   };
   divisionService: {
-    load: (competitionId: string) => Promise<void>;
+    load: (competitionId: string) => Promise<unknown>;
     loadById: (divisionId: string) => Promise<Division | null>;
     use: {
       divisions: () => Division[];

@@ -8,7 +8,9 @@ export function createCounterAdminControlService({
   return {
     load: {
       competitions: (): Promise<void> => competitionService.load(),
-      divisionsByCompetition: (competitionId: string): Promise<void> => divisionService.load(competitionId),
+      divisionsByCompetition: async (competitionId: string): Promise<void> => {
+        await divisionService.load(competitionId);
+      },
       connectedDivision: (divisionId: string) => divisionService.loadById(divisionId),
     },
     control: {
