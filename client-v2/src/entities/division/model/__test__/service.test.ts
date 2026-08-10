@@ -40,7 +40,7 @@ describe("createDivisionService", () => {
   it("loads a competition's divisions into the store in created-at descending order", async () => {
     const repository = createRepository();
     vi.mocked(repository.getAllDivisions).mockResolvedValue([oldest, newest]);
-    await createDivisionService({ divisionRepository: repository }).load("competition-1");
+    await expect(createDivisionService({ divisionRepository: repository }).load("competition-1")).resolves.toEqual([oldest, newest]);
     expect(useDivisionStore.getState().divisions).toEqual([newest, oldest]);
   });
 

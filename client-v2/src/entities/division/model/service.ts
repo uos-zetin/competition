@@ -20,9 +20,10 @@ export function createDivisionService({ divisionRepository }: { divisionReposito
     );
 
   return {
-    load: async (competitionId: string): Promise<void> => {
+    load: async (competitionId: string): Promise<Division[]> => {
       const divisions = await divisionRepository.getAllDivisions(competitionId);
       useDivisionStore.getState().setByCompetition(competitionId, divisions);
+      return divisions;
     },
     loadById: async (divisionId: string): Promise<Division | null> => {
       const division = await divisionRepository.getDivisionById(divisionId);
