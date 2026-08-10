@@ -14,6 +14,7 @@ export function createCounterService({
   counterChannel: CounterChannel;
 }) {
   let unsubscribe: (() => void) | null = null;
+  const connectionGenerations = new Map<string, number>();
 
   const updateStore = (counter: CounterState) => {
     const store = useCounterStore.getState();
@@ -49,6 +50,7 @@ export function createCounterService({
     },
     connection: {
       connect: async (counterId: string): Promise<void> => {
+        connectionGenerations.set(counterId, (connectionGenerations.get(counterId) ?? 0) + 1);
         unsubscribe?.();
         unsubscribe = counterChannel.subscribe((dto) => updateStore(parseCounterDto(dto)));
         try {
@@ -60,10 +62,13 @@ export function createCounterService({
         }
       },
       disconnect: async (counterId?: string): Promise<void> => {
+        const connectionGeneration = counterId ? connectionGenerations.get(counterId) : undefined;
         unsubscribe?.();
         unsubscribe = null;
         await counterChannel.disconnect();
-        if (counterId) useCounterStore.getState().remove(counterId);
+        if (counterId && connectionGenerations.get(counterId) === connectionGeneration) {
+          useCounterStore.getState().remove(counterId);
+        }
       },
     },
     use: {
