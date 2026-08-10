@@ -96,15 +96,15 @@ export function TimerControlPanel({ participantId, timerLogs, timeLimitMs }: Tim
         <div className="grid grid-cols-3 divide-x rounded-lg border bg-muted/30 text-center">
           <div className="min-w-0 px-2 py-2.5">
             <p className="text-[11px] text-muted-foreground">제한 시간</p>
-            <p className="mt-1 truncate font-mono text-xs font-semibold">{formatMsToTime(timeLimitMs)}</p>
+            <p className="mt-1 truncate text-xs font-semibold tabular-nums">{formatMsToTime(timeLimitMs)}</p>
           </div>
           <div className="min-w-0 px-2 py-2.5">
             <p className="text-[11px] text-muted-foreground">누적 시간</p>
-            <p className="mt-1 truncate font-mono text-xs font-semibold">{formatMsToTime(timerState.accumulatedMs)}</p>
+            <p className="mt-1 truncate text-xs font-semibold tabular-nums">{formatMsToTime(timerState.accumulatedMs)}</p>
           </div>
           <div className="min-w-0 px-2 py-2.5">
             <p className="text-[11px] text-muted-foreground">시간 조정</p>
-            <p className="mt-1 truncate font-mono text-xs font-semibold">
+            <p className="mt-1 truncate text-xs font-semibold tabular-nums">
               {timerState.offsetMs >= 0 ? "+" : "-"}
               {formatMsToTime(Math.abs(timerState.offsetMs))}
             </p>
