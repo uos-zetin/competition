@@ -67,6 +67,44 @@ describe("createCounterService", () => {
     expect(useCounterStore.getState().counters).toEqual([]);
   });
 
+  it("keeps a same-id reconnection when an earlier disconnect completes late", async () => {
+    const channel = createChannel();
+    let resolveDisconnect: (() => void) | undefined;
+    vi.mocked(channel.disconnect).mockImplementationOnce(
+      () => new Promise<void>((resolve) => { resolveDisconnect = resolve; })
+    );
+    const service = createCounterService({ counterRepository: createRepository(), counterChannel: channel });
+
+    await service.connection.connect("counter-1");
+    channel.emit(dto);
+    const staleDisconnect = service.connection.disconnect("counter-1");
+    await service.connection.connect("counter-1");
+    channel.emit(dto);
+    resolveDisconnect?.();
+    await staleDisconnect;
+
+    expect(useCounterStore.getState().counters).toEqual([counter]);
+  });
+
+  it("removes an old counter when a different counter connects during its disconnect", async () => {
+    const channel = createChannel();
+    let resolveDisconnect: (() => void) | undefined;
+    vi.mocked(channel.disconnect).mockImplementationOnce(
+      () => new Promise<void>((resolve) => { resolveDisconnect = resolve; })
+    );
+    const service = createCounterService({ counterRepository: createRepository(), counterChannel: channel });
+
+    await service.connection.connect("counter-1");
+    channel.emit(dto);
+    const staleDisconnect = service.connection.disconnect("counter-1");
+    await service.connection.connect("counter-2");
+    channel.emit({ ...dto, deviceId: "counter-2", name: "계수기 2" });
+    resolveDisconnect?.();
+    await staleDisconnect;
+
+    expect(useCounterStore.getState().counters).toEqual([{ ...counter, id: "counter-2", name: "계수기 2" }]);
+  });
+
   it("derives connection state from counter presence", () => {
     const service = createCounterService({ counterRepository: createRepository(), counterChannel: createChannel() });
     const { result, rerender } = renderHook(() => service.use.isConnected("counter-1"));
