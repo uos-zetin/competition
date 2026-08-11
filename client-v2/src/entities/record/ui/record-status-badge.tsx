@@ -5,6 +5,7 @@ import type { RecordStatus } from "../model";
 
 interface RecordStatusBadgeProps {
   status: RecordStatus;
+  pendingCount?: number;
 }
 
 const statusClassNames: Record<RecordStatus, string> = {
@@ -13,10 +14,11 @@ const statusClassNames: Record<RecordStatus, string> = {
   rejected: "border-red-500/30 bg-red-500/10 text-red-700 dark:text-red-300",
 };
 
-export function RecordStatusBadge({ status }: RecordStatusBadgeProps) {
-  return (
-    <Badge className={statusClassNames[status]}>
-      {getRecordStatusLabel(status)}
-    </Badge>
-  );
+export function RecordStatusBadge({ status, pendingCount }: RecordStatusBadgeProps) {
+  const label =
+    status === "pending" && pendingCount !== undefined
+      ? `${getRecordStatusLabel(status)} ${pendingCount}`
+      : getRecordStatusLabel(status);
+
+  return <Badge className={statusClassNames[status]}>{label}</Badge>;
 }

@@ -19,7 +19,7 @@ describe("ParticipantMockRepository", () => {
 
   it("updates and deletes only the requested participant", async () => {
     const repository = new ParticipantMockRepository();
-    const [first, second] = await repository.getParticipantsByDivision("division-elementary");
+    const [first, second] = await repository.getParticipantsByDivision("division-preliminary-a");
     const updated = { ...first, name: "수정된 참가자" };
     await expect(repository.updateParticipant(updated)).resolves.toEqual(updated);
     await expect(repository.getParticipantsByDivision(first.divisionId)).resolves.toEqual([updated, second]);

@@ -5,7 +5,7 @@ import type { ParticipantRepository } from "./types";
 const seedParticipants: Participant[] = [
   {
     id: "participant-1",
-    divisionId: "division-elementary",
+    divisionId: "division-preliminary-a",
     name: "김라인",
     teamName: "트레이서즈",
     robotName: "LT-01",
@@ -15,7 +15,7 @@ const seedParticipants: Participant[] = [
   },
   {
     id: "participant-2",
-    divisionId: "division-elementary",
+    divisionId: "division-preliminary-a",
     name: "박순환",
     teamName: "회로도둑",
     robotName: "블랙박스",
@@ -25,7 +25,7 @@ const seedParticipants: Participant[] = [
   },
   {
     id: "participant-3",
-    divisionId: "division-middle",
+    divisionId: "division-finals",
     name: "이궤적",
     teamName: "커브",
     robotName: "Arc-7",

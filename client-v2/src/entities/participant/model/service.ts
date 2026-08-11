@@ -14,9 +14,10 @@ export function createParticipantService({ participantRepository }: { participan
     );
 
   return {
-    load: async (divisionId: string): Promise<void> => {
+    load: async (divisionId: string): Promise<Participant[]> => {
       const participants = await participantRepository.getParticipantsByDivision(divisionId);
       useParticipantStore.getState().setByDivision(divisionId, participants);
+      return participants;
     },
     admin: {
       create: async (form: ParticipantForm): Promise<Participant> => {
