@@ -1,2 +1,3 @@
 export { AdminNavShell } from "./ui";
-export type { AdminNavSection } from "./ui";
+export { adminNavItems } from "./ui";
+export type { AdminNavItem, AdminNavSection } from "./ui";
