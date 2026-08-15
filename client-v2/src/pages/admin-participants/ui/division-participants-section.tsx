@@ -13,6 +13,8 @@ type DivisionParticipantsSectionProps = {
   onEdit: (participant: Participant) => void;
   onDelete: (participant: Participant) => void;
   onCreateInDivision: (divisionId: string) => void;
+  isExpanded: boolean;
+  onToggle: () => void;
 };
 
 export function DivisionParticipantsSection({
@@ -20,6 +22,8 @@ export function DivisionParticipantsSection({
   onEdit,
   onDelete,
   onCreateInDivision,
+  isExpanded,
+  onToggle,
 }: DivisionParticipantsSectionProps) {
   const participants = participantService.use.byDivision(division.id);
   const [currentPage, setCurrentPage] = useState(1);
@@ -30,12 +34,12 @@ export function DivisionParticipantsSection({
   return (
     <section>
       <header className="mb-4 flex flex-wrap items-start justify-between gap-3 border-b pb-3">
-        <div>
+        <button type="button" className="flex items-start gap-2 text-left" onClick={onToggle} aria-expanded={isExpanded}><ChevronRight className={`mt-1 size-4 shrink-0 transition-transform ${isExpanded ? "rotate-90" : ""}`} aria-hidden="true" /><div>
           <h3 className="text-[1.0625rem] font-bold">{division.name}</h3>
           <p className="mt-1.5 text-[0.8125rem] text-muted-foreground">
             {division.description.trim() || "설명이 없습니다"}
           </p>
-        </div>
+        </div></button>
         <div className="flex shrink-0 items-center gap-2.5">
           <span className="rounded-full bg-secondary px-2.5 py-0.5 text-xs font-semibold text-secondary-foreground">
             총 {participants.length}명
@@ -46,7 +50,7 @@ export function DivisionParticipantsSection({
         </div>
       </header>
 
-      {participants.length === 0 ? (
+      {isExpanded && (participants.length === 0 ? (
         <div className="flex flex-col items-center gap-2.5 rounded-xl border border-dashed bg-card px-6 py-8 text-center">
           <div className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary">
             <UsersRound className="size-5" aria-hidden="true" />
@@ -72,7 +76,7 @@ export function DivisionParticipantsSection({
             </nav>
           ) : null}
         </>
-      )}
+      ))}
     </section>
   );
 }

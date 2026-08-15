@@ -21,6 +21,12 @@ const seedCompetitions: Competition[] = [
     description: "",
     createdAt: new Date("2025-11-01T09:00:00+09:00"),
   },
+  {
+    id: "competition-upcoming",
+    name: "2026 겨울 친선 대회",
+    description: "준비 중인 대회입니다.",
+    createdAt: new Date("2026-08-01T09:00:00+09:00"),
+  },
 ];
 
 export class CompetitionMockRepository implements CompetitionRepository {

@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { RefreshCw } from "lucide-react";
 
 import { cn, formatRelativeTimeKo } from "@/shared/lib";
@@ -27,6 +29,13 @@ export function CounterPickerField({
   lastFetchedAt,
   onRefresh,
 }: CounterPickerFieldProps) {
+  const [isSpinning, setIsSpinning] = useState(false);
+  const selectedCounter = counters.find((counter) => counter.id === value);
+  const handleRefresh = () => {
+    setIsSpinning(true);
+    window.setTimeout(() => setIsSpinning(false), 600);
+    onRefresh();
+  };
   return (
     <div>
       <div className="mb-2.5 flex items-baseline justify-between gap-3">
@@ -40,9 +49,9 @@ export function CounterPickerField({
             size="sm"
             className="h-auto gap-1 px-1 text-xs text-primary hover:bg-transparent hover:text-primary/70"
             disabled={isRefreshing}
-            onClick={onRefresh}
+            onClick={handleRefresh}
           >
-            <RefreshCw className={cn("size-3.5", isRefreshing && "animate-spin")} aria-hidden="true" />
+            <RefreshCw className={cn("size-3.5", isSpinning && "animate-spin")} aria-hidden="true" />
             새로고침
           </Button>
           {lastFetchedAt ? (
@@ -53,9 +62,9 @@ export function CounterPickerField({
       {!isLoading && counters.length === 0 ? (
         <p className="py-5 text-center text-sm text-muted-foreground">사용 가능한 계수기가 없습니다</p>
       ) : (
-        <Select value={value} onValueChange={onChange} disabled={isLoading}>
+        <Select value={value} onValueChange={onChange} disabled={isLoading || isRefreshing}>
           <SelectTrigger id="counter-selector" className="h-11 hover:border-primary">
-            <SelectValue placeholder={isLoading ? "계수기 목록을 불러오는 중…" : "계수기를 선택하세요"} />
+            <SelectValue placeholder={isLoading || isRefreshing ? "계수기 목록을 불러오는 중…" : "계수기를 선택하세요"}>{selectedCounter ? <span className="block truncate">{selectedCounter.name} · {getDivisionName(selectedCounter.divisionId)}</span> : undefined}</SelectValue>
           </SelectTrigger>
           <SelectContent className="w-[var(--radix-select-trigger-width)]">
             <p className="px-2 py-1.5 text-[0.6875rem] font-semibold tracking-[0.04em] text-muted-foreground">

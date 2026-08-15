@@ -36,6 +36,18 @@ describe("createAuthService", () => {
     expect(useAuthStore.getState()).toMatchObject({ user: kim, isAuthenticated: true, sessionKey: "session-1" });
   });
 
+  it("stores the session key before looking up the current user", async () => {
+    const repository = createRepository();
+    vi.mocked(repository.login).mockResolvedValue("session-before-whoami");
+    vi.mocked(userService.load.currentUser).mockImplementation(async () => {
+      expect(useAuthStore.getState().sessionKey).toBe("session-before-whoami");
+      expect(useAuthStore.getState().isAuthenticated).toBe(false);
+      return kim;
+    });
+
+    await createAuthService({ authRepository: repository }).auth.login({ userName: "kim.jaehyun", password: "password" });
+  });
+
   it("clears the store when login fails", async () => {
     const repository = createRepository();
     useAuthStore.getState().setAuth(kim, "old-session");

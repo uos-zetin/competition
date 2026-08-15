@@ -1,3 +1,5 @@
+import { formatTimeShort } from "@/shared/lib";
+
 type DashboardHeaderProps = {
   lastUpdatedAt: Date | null;
 };
@@ -10,7 +12,7 @@ export function DashboardHeader({ lastUpdatedAt }: DashboardHeaderProps) {
         <p className="text-sm text-muted-foreground">완주한 참가자의 최고 기록과 진행 상황을 확인하세요</p>
         {lastUpdatedAt ? (
           <time className="font-mono text-xs tabular-nums text-muted-foreground">
-            마지막 업데이트 {lastUpdatedAt.toLocaleTimeString("ko-KR")}
+            마지막 업데이트 {formatTimeShort(lastUpdatedAt)}
           </time>
         ) : null}
       </div>

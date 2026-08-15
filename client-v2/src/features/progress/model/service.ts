@@ -1,3 +1,5 @@
+import { ConnectionCancelledError } from "@/shared/api";
+
 import type { ProgressChannel, ProgressRepository } from "../api/types";
 
 import { useProgressStore } from "./store.zustand";
@@ -24,8 +26,9 @@ export function createProgressService({ progressRepository, progressChannel }: {
     connection: {
       connect: async (divisionId: string): Promise<void> => {
         unsubscribe?.();
-        unsubscribe = progressChannel.subscribe((progress) => useProgressStore.getState().setProgress(progress));
-        try { await progressChannel.connect(divisionId); } catch (error) { unsubscribe?.(); unsubscribe = null; throw error; }
+        const subscription = progressChannel.subscribe((progress) => useProgressStore.getState().setProgress(progress));
+        unsubscribe = subscription;
+        try { await progressChannel.connect(divisionId); } catch (error) { if (unsubscribe === subscription) { subscription(); unsubscribe = null; } if (error instanceof ConnectionCancelledError) return; throw error; }
       },
       disconnect: async (): Promise<void> => {
         unsubscribe?.();

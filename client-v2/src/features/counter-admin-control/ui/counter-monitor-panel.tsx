@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import { Clock3 } from "lucide-react";
 
+import { formatTimeShort } from "@/shared/lib";
 import { Button, ConfirmDialog, TimeDisplay } from "@/shared/ui";
 import { formatElapsedMs, isRunning, useStopwatchTimer } from "@/entities/counter";
 // Error handling is the architecture's designated cross-cutting feature exception.
@@ -55,8 +56,8 @@ export function CounterMonitorPanel({ counterId }: CounterMonitorPanelProps) {
           </span>
         </div>
         <div className="grid grid-cols-2 gap-2">
-          <TimeMark label="시작 시간" value={stopwatch.startedAt ? new Date(stopwatch.startedAt).toLocaleTimeString() : "---"} />
-          <TimeMark label="종료 시간" value={stopwatch.stoppedAt ? new Date(stopwatch.stoppedAt).toLocaleTimeString() : "---"} />
+          <TimeMark label="시작 시간" value={stopwatch.startedAt ? formatTimeShort(new Date(stopwatch.startedAt)) : "---"} />
+          <TimeMark label="종료 시간" value={stopwatch.stoppedAt ? formatTimeShort(new Date(stopwatch.stoppedAt)) : "---"} />
         </div>
         {!idle ? (
           <Button type="button" variant="destructive" onClick={() => setResetOpen(true)}>

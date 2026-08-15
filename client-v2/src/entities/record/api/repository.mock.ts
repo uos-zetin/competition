@@ -30,6 +30,11 @@ const seedRecords: Record[] = [
     note: "코스 이탈",
     createdAt: new Date("2026-03-04T14:20:00+09:00"),
   },
+  { id: "record-finals-approved", participantId: "participant-3", value: 48500, source: "stopwatch", status: "approved", note: "본선 완주", createdAt: new Date("2026-03-05T12:00:00+09:00") },
+  { id: "record-finals-pending", participantId: "participant-5", value: 49200, source: "manual", status: "pending", note: "검토 중", createdAt: new Date("2026-03-05T12:10:00+09:00") },
+  { id: "record-championship-approved", participantId: "participant-7", value: 47100, source: "other", status: "approved", note: "결승 최고 기록", createdAt: new Date("2026-03-06T12:00:00+09:00") },
+  { id: "record-championship-retry", participantId: "participant-7", value: 48800, source: "stopwatch", status: "rejected", note: "재시도 코스 이탈", createdAt: new Date("2026-03-06T12:10:00+09:00") },
+  { id: "record-fall-approved", participantId: "participant-16", value: 50300, source: "stopwatch", status: "approved", note: "신입생 B조 기록", createdAt: new Date("2025-11-02T12:00:00+09:00") },
 ];
 
 export class RecordMockRepository implements RecordRepository {

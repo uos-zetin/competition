@@ -30,6 +30,7 @@ export interface AuthService {
 export interface AuthStore extends AuthState {
   sessionKey: string | null;
   sessionExpiresAt: number | null;
+  setSessionKey(sessionKey: string): void;
   setAuth(user: User, sessionKey: string): void;
   clearAuth(): void;
 }

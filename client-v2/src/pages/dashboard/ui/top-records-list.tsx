@@ -14,6 +14,8 @@ const rankClassName: Record<number, string> = {
 };
 
 export function TopRecordsList({ records, variant }: TopRecordsListProps) {
+  if (records.length === 0) return <p className="px-[1.1rem] py-4 text-center text-xs text-muted-foreground">완주한 참가자가 없습니다</p>;
+
   if (variant === "mini") {
     return (
       <div>

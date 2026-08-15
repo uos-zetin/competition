@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+import { X } from "lucide-react";
 
 import { env } from "@/shared/config/env";
 import { Button } from "@/shared/ui";
@@ -13,12 +15,24 @@ function getRoleLabel(roleCount: number, isAdministrator: boolean): string {
 
 export function AuthDebugWidget() {
   const [expanded, setExpanded] = useState(false);
+  const panelRef = useRef<HTMLElement>(null);
   const { user, isAuthenticated } = authService.use.auth();
   const users = userService.use.users();
 
   useEffect(() => {
     if (env.useMocks) void userService.load.all();
   }, []);
+
+  useEffect(() => {
+    if (!expanded) return;
+    const closeOnOutsidePointer = (event: PointerEvent) => {
+      if (panelRef.current && !panelRef.current.contains(event.target as Node)) setExpanded(false);
+    };
+    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") setExpanded(false); };
+    document.addEventListener("pointerdown", closeOnOutsidePointer);
+    document.addEventListener("keydown", closeOnEscape);
+    return () => { document.removeEventListener("pointerdown", closeOnOutsidePointer); document.removeEventListener("keydown", closeOnEscape); };
+  }, [expanded]);
 
   if (!env.useMocks) return null;
 
@@ -38,10 +52,8 @@ export function AuthDebugWidget() {
   }
 
   return (
-    <section className="fixed right-4 bottom-4 z-50 w-80 rounded-xl border bg-card p-4 shadow-lg">
-      <button type="button" className="mb-4 text-left text-sm font-bold" onClick={() => setExpanded(false)}>
-        인증 디버그
-      </button>
+    <section ref={panelRef} className="fixed right-4 bottom-4 z-50 w-80 rounded-xl border bg-card p-4 shadow-lg">
+      <div className="mb-4 flex items-center justify-between"><span className="text-sm font-bold">인증 디버그</span><button type="button" aria-label="닫기" className="rounded-md p-1 text-muted-foreground hover:bg-muted hover:text-foreground" onClick={() => setExpanded(false)}><X className="size-4" aria-hidden="true" /></button></div>
       <div className="flex items-center gap-3">
         <span className="grid size-9 place-items-center rounded-full bg-secondary text-sm font-bold">{user?.name.slice(0, 1) ?? "-"}</span>
         <div className="min-w-0">

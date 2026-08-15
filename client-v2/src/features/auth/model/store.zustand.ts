@@ -13,6 +13,11 @@ export const useAuthStore = create<AuthStore>()(
       isAuthenticated: false,
       sessionKey: null,
       sessionExpiresAt: null,
+      setSessionKey: (sessionKey) =>
+        set((state) => {
+          state.sessionKey = sessionKey;
+          state.sessionExpiresAt = Date.now() + SESSION_TTL_MS;
+        }),
       setAuth: (user, sessionKey) =>
         set((state) => {
           state.user = user;

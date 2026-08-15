@@ -20,7 +20,7 @@ export function AdminDashboardPage() {
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {adminNavItems.slice(1).map((item) => (
-              <NavCard key={item.id} icon={item.icon} title={item.label} description={item.description} to={item.href} />
+              <NavCard key={item.id} id={item.id} icon={item.icon} title={item.label} description={item.description} to={item.href} />
             ))}
           </div>
         </AdminNavShell>

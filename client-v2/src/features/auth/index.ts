@@ -1,4 +1,5 @@
 import "./model/session-provider";
+import "./model/register-error-handler";
 
 import type { LoginForm as LoginFormValue } from "./model/types";
 

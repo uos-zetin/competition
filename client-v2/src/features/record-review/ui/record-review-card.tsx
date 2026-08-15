@@ -2,7 +2,7 @@ import { type KeyboardEvent,useState } from "react";
 
 import { PenLine } from "lucide-react";
 
-import { cn,formatMsToClock } from "@/shared/lib";
+import { cn, formatCreatedAtLongWithTime, formatMsToClock } from "@/shared/lib";
 import { Button, Textarea } from "@/shared/ui";
 import { getRecordStatusLabel, type Record as RecordEntity, recordService, RecordSourceBadge, type RecordStatus,RecordStatusBadge } from "@/entities/record";
 // Error handling is the architecture's designated cross-cutting feature exception.
@@ -13,8 +13,6 @@ interface RecordReviewCardProps {
   record: RecordEntity;
   participantName?: string;
 }
-
-const dateTimeFormatter = new Intl.DateTimeFormat("ko-KR", { dateStyle: "long", timeStyle: "short" });
 
 const selectedStatusClassNames: Record<RecordStatus, string> = {
   pending: "border-amber-600/30 bg-amber-500/10 text-amber-800 dark:text-amber-300",
@@ -117,7 +115,7 @@ export function RecordReviewCard({ record, participantName }: RecordReviewCardPr
         </div>
       </div>
       <div className="flex flex-wrap gap-x-1.5 text-xs text-muted-foreground">
-        <span>{dateTimeFormatter.format(record.createdAt)}</span>
+        <span>{formatCreatedAtLongWithTime(record.createdAt)}</span>
         {record.note ? <><span aria-hidden="true">·</span><span>{record.note}</span></> : null}
       </div>
       {(!isPending || activePanel === null) ? actionRow : null}

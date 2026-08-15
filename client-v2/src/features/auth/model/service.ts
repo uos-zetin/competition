@@ -17,6 +17,7 @@ export function createAuthService({ authRepository }: { authRepository: AuthRepo
       login: async (form: LoginForm): Promise<User> => {
         try {
           const sessionKey = await authRepository.login(form);
+          useAuthStore.getState().setSessionKey(sessionKey);
           const user = await userService.load.currentUser();
           if (!user) throw new Error("현재 사용자를 찾을 수 없습니다.");
           useAuthStore.getState().setAuth(user, sessionKey);
