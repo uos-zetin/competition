@@ -3,6 +3,7 @@ import type { Division } from "@/entities/division";
 import type { TopRecordRow } from "../lib/format-top-records";
 
 import { DivisionGroup } from "./division-group";
+import { EmptyState } from "./empty-state";
 
 type AllDivisionsViewProps = {
   divisions: Division[];
@@ -18,7 +19,7 @@ export function AllDivisionsView({ divisions, recordsByDivision, onSelectDivisio
         <p className="mt-0.5 text-xs text-muted-foreground">부문을 선택하면 전체 순위를 볼 수 있습니다</p>
       </div>
       <div className="rounded-xl border bg-card">
-        {divisions.map((division) => (
+        {divisions.length === 0 ? <EmptyState icon="🏁" title="등록된 부문이 없습니다" description="이 대회에는 아직 등록된 부문이 없습니다." variant="sub" /> : divisions.map((division) => (
           <DivisionGroup
             key={division.id}
             division={division}

@@ -55,7 +55,7 @@ export function TimerPage() {
   return (
     <main className="grid h-dvh grid-rows-[auto_1fr] overflow-hidden bg-background">
       <TimerHeader />
-      <div className="@container grid min-h-0 grid-rows-[auto_1fr] gap-[clamp(.4rem,1cqi,1rem)] p-[clamp(.5rem,1.5cqi,1.4rem)]">
+      <div className="@container grid min-h-0 grid-rows-[1fr_1fr] gap-[clamp(.4rem,1cqi,1rem)] p-[clamp(.5rem,1.5cqi,1.4rem)]">
         <section className="grid min-w-0 grid-cols-2">
           <div className="flex min-w-0 flex-col items-center justify-center p-2 text-center">
             <DivisionInfo />

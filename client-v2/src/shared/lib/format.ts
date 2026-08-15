@@ -1,5 +1,15 @@
+const koreanTimeZone = "Asia/Seoul";
+
 export function formatCreatedAtLong(date: Date): string {
-  return new Intl.DateTimeFormat("ko-KR", { dateStyle: "long" }).format(date);
+  return new Intl.DateTimeFormat("ko-KR", { dateStyle: "long", timeZone: koreanTimeZone }).format(date);
+}
+
+export function formatCreatedAtLongWithTime(date: Date): string {
+  return new Intl.DateTimeFormat("ko-KR", { dateStyle: "long", timeStyle: "short", timeZone: koreanTimeZone }).format(date);
+}
+
+export function formatTimeShort(date: Date): string {
+  return new Intl.DateTimeFormat("ko-KR", { timeStyle: "short", timeZone: koreanTimeZone }).format(date);
 }
 
 export function formatMsToClock(ms: number): string {

@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import { Outlet, useNavigation } from "react-router";
 
+import { authService } from "@/features/auth";
 import { ErrorModalHost, ErrorToastHost } from "@/features/error-handling";
 import { LoadingPage } from "@/pages/loading";
 
@@ -12,6 +14,10 @@ const LOADING_MESSAGES: Record<string, string> = {
 export function RootLayout() {
   const navigation = useNavigation();
   const message = LOADING_MESSAGES[navigation.location?.pathname ?? ""];
+
+  useEffect(() => {
+    void authService.auth.restoreSession();
+  }, []);
 
   return (
     <>

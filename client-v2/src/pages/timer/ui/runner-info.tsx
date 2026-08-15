@@ -7,7 +7,7 @@ import { useMarqueeOverflow } from "../lib/use-marquee-overflow";
 export function RunnerInfo() {
   const participant = progressService.use.runner()?.participant;
   const name = participant ? `${participant.name} · ${participant.robotName}` : "—";
-  const nameClassName = "text-[clamp(.95rem,2.55cqi,2.25rem)] font-extrabold whitespace-nowrap";
+  const nameClassName = "text-[clamp(1.15rem,3.8cqi,3.2rem)] font-extrabold whitespace-nowrap";
   const { containerRef, measureRef, shouldAnimate } = useMarqueeOverflow(name, nameClassName);
 
   return (
@@ -24,7 +24,7 @@ export function RunnerInfo() {
           <p className={nameClassName}>{name}</p>
         )}
       </div>
-      <p className="mt-[clamp(.1rem,.3cqi,.3rem)] w-full truncate text-[clamp(.7rem,1.3cqi,1.1rem)] text-muted-foreground">
+      <p className="mt-[clamp(.1rem,.3cqi,.3rem)] w-full truncate text-[clamp(.9rem,2cqi,1.6rem)] text-muted-foreground">
         {participant?.teamName ?? "—"}
       </p>
     </>

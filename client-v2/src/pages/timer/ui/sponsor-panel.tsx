@@ -16,7 +16,7 @@ export function SponsorPanel({ dashboardUrl }: { dashboardUrl: string }) {
   };
   return (
     <Panel title="스폰서">
-      <div className="flex min-h-0 flex-1 flex-col">
+      <div className="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)_minmax(0,1fr)]">
         <input
           ref={inputRef}
           type="file"
@@ -32,7 +32,7 @@ export function SponsorPanel({ dashboardUrl }: { dashboardUrl: string }) {
           aria-label="이미지 업로드"
           onClick={openFilePicker}
           onKeyDown={handleKeyDown}
-          className="group relative flex min-h-0 flex-1 cursor-pointer items-center justify-center overflow-hidden bg-muted/30"
+          className="group relative flex min-h-0 cursor-pointer items-center justify-center overflow-hidden bg-muted/30"
         >
           <>
             {imageUrl ? (

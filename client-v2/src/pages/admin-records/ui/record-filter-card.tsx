@@ -30,7 +30,7 @@ export function RecordFilterCard({
   const isCompetitionSelected = Boolean(competitionId);
 
   return (
-    <section className="mb-[1.375rem] grid grid-cols-1 gap-4 rounded-xl border bg-card px-5 py-4 sm:grid-cols-3">
+    <section className="mb-[1.375rem] grid grid-cols-1 gap-4 rounded-xl border bg-card px-5 py-4 md:grid-cols-3">
       <div>
         <label className="mb-2 block text-[0.8125rem] font-medium" htmlFor="competition-select">
           대회 선택

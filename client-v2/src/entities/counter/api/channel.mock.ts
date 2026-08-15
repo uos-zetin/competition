@@ -2,7 +2,12 @@ import type { CounterState } from "../model/types";
 
 import type { CounterChannel, CounterDto } from "./types";
 
-export const mockCounterStates = new Map<string, CounterState>();
+const seedCounters: CounterState[] = [
+  { id: "counter-1", name: "계수기 1", startedAt: null, stoppedAt: null, divisionId: null },
+  { id: "counter-2", name: "계수기 2", startedAt: null, stoppedAt: null, divisionId: "division-finals" },
+];
+
+export const mockCounterStates = new Map<string, CounterState>(seedCounters.map((counter) => [counter.id, counter]));
 const handlers = new Set<(counter: CounterDto) => void>();
 
 export function emitMockCounter(counter: CounterState): void {
@@ -13,14 +18,8 @@ export function emitMockCounter(counter: CounterState): void {
 
 export class CounterMockChannel implements CounterChannel {
   async connect(counterId: string): Promise<void> {
-    const counter = mockCounterStates.get(counterId) ?? {
-      id: counterId,
-      name: `계수기 ${counterId}`,
-      startedAt: null,
-      stoppedAt: null,
-      divisionId: null,
-    };
-    emitMockCounter(counter);
+    const counter = mockCounterStates.get(counterId);
+    if (counter) emitMockCounter(counter);
   }
 
   async disconnect(): Promise<void> {

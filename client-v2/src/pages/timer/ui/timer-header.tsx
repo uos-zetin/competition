@@ -20,7 +20,7 @@ export function TimerHeader() {
       tabIndex={0}
       onClick={openFilePicker}
       onKeyDown={handleKeyDown}
-      className="group relative flex min-h-[clamp(3rem,7cqi,6rem)] cursor-pointer items-center justify-center overflow-hidden bg-primary px-6 py-[clamp(.5rem,1.3cqi,1rem)] text-center text-primary-foreground"
+      className="group relative flex min-h-[clamp(3rem,9dvw,10rem)] cursor-pointer items-center justify-center overflow-hidden bg-primary px-6 py-[clamp(.5rem,1.3cqi,1rem)] text-center text-primary-foreground"
     >
       <input
         ref={inputRef}
@@ -31,7 +31,7 @@ export function TimerHeader() {
         onChange={(event) => selectImage(event.target.files)}
       />
       {imageUrl ? (
-        <img src={imageUrl} alt="대회 배너" className="absolute inset-0 size-full object-cover" />
+        <><img src={imageUrl} alt="" aria-hidden="true" className="absolute inset-0 size-full scale-110 object-cover blur-lg brightness-50" /><img src={imageUrl} alt="대회 배너" className="absolute inset-0 size-full object-contain" /></>
       ) : (
         <h1 className="text-[clamp(1.1rem,3.4cqi,3rem)] font-extrabold tracking-tight">{competition?.name ?? "—"}</h1>
       )}

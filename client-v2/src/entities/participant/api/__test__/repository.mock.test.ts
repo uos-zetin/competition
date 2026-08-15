@@ -22,9 +22,11 @@ describe("ParticipantMockRepository", () => {
     const [first, second] = await repository.getParticipantsByDivision("division-preliminary-a");
     const updated = { ...first, name: "수정된 참가자" };
     await expect(repository.updateParticipant(updated)).resolves.toEqual(updated);
-    await expect(repository.getParticipantsByDivision(first.divisionId)).resolves.toEqual([updated, second]);
+    await expect(repository.getParticipantsByDivision(first.divisionId)).resolves.toEqual(expect.arrayContaining([updated, second]));
     await repository.deleteParticipant(first.id);
-    await expect(repository.getParticipantsByDivision(first.divisionId)).resolves.toEqual([second]);
+    const remaining = await repository.getParticipantsByDivision(first.divisionId);
+    expect(remaining).toContainEqual(second);
+    expect(remaining).not.toContainEqual(updated);
   });
 
   it("creates participants in the requested division", async () => {

@@ -1,3 +1,5 @@
+import { ConnectionCancelledError } from "@/shared/api";
+
 import type { CounterChannel, CounterRepository } from "../api/types";
 import { parseCounterDto } from "../lib/parse-dto";
 
@@ -52,12 +54,16 @@ export function createCounterService({
       connect: async (counterId: string): Promise<void> => {
         connectionGenerations.set(counterId, (connectionGenerations.get(counterId) ?? 0) + 1);
         unsubscribe?.();
-        unsubscribe = counterChannel.subscribe((dto) => updateStore(parseCounterDto(dto)));
+        const subscription = counterChannel.subscribe((dto) => updateStore(parseCounterDto(dto)));
+        unsubscribe = subscription;
         try {
           await counterChannel.connect(counterId);
         } catch (error) {
-          unsubscribe?.();
-          unsubscribe = null;
+          if (unsubscribe === subscription) {
+            subscription();
+            unsubscribe = null;
+          }
+          if (error instanceof ConnectionCancelledError) return;
           throw error;
         }
       },

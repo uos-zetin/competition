@@ -30,6 +30,10 @@ const seedDivisions: Division[] = [
     status: "closed",
     timeLimit: 120,
   },
+  { id: "division-freshman-a", competitionId: "competition-freshman", name: "신입생 A조", description: "첫 주행 부문입니다.", createdAt: new Date("2026-02-15T09:00:00+09:00"), status: "ready", timeLimit: 120 },
+  { id: "division-freshman-b", competitionId: "competition-freshman", name: "신입생 B조", description: "두 번째 주행 부문입니다.", createdAt: new Date("2026-02-15T09:30:00+09:00"), status: "ready", timeLimit: 120 },
+  { id: "division-fall-preliminary", competitionId: "competition-2025-fall", name: "가을 예선", description: "2025년 예선 기록입니다.", createdAt: new Date("2025-11-02T09:00:00+09:00"), status: "closed", timeLimit: 90 },
+  { id: "division-fall-finals", competitionId: "competition-2025-fall", name: "가을 결선", description: "2025년 결선 기록입니다.", createdAt: new Date("2025-11-03T09:00:00+09:00"), status: "closed", timeLimit: 150 },
 ];
 
 export class DivisionMockRepository implements DivisionRepository {

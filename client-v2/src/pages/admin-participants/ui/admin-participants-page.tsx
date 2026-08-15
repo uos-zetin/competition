@@ -23,7 +23,7 @@ export function AdminParticipantsPage() {
   const competitionId = searchParams.get("competitionId") ?? "";
   const competitions = competitionService.use.competitions();
   const divisions = divisionService.use.divisionsByCompetition(competitionId);
-  const selectedCompetitionName = competitions.find((competition) => competition.id === competitionId)?.name ?? "알 수 없는 대회";
+  const [expandedDivisionIds, setExpandedDivisionIds] = useState<Set<string>>(() => new Set());
   const [formDialogOpen, setFormDialogOpen] = useState(false);
   const [editingParticipant, setEditingParticipant] = useState<Participant>();
   const [defaultDivisionId, setDefaultDivisionId] = useState<string>();
@@ -76,7 +76,6 @@ export function AdminParticipantsPage() {
                 ))}
               </SelectContent>
             </Select>
-            {competitionId ? <p className="text-[0.8125rem] font-medium text-primary">선택된 대회: {selectedCompetitionName}</p> : null}
           </section>
 
           {!competitionId ? (
@@ -89,6 +88,8 @@ export function AdminParticipantsPage() {
                 <DivisionParticipantsSection
                   key={division.id}
                   division={division}
+                  isExpanded={expandedDivisionIds.has(division.id)}
+                  onToggle={() => setExpandedDivisionIds((ids) => { const next = new Set(ids); if (next.has(division.id)) next.delete(division.id); else next.add(division.id); return next; })}
                   onEdit={openEditDialog}
                   onDelete={openDeleteDialog}
                   onCreateInDivision={openCreateDialog}
