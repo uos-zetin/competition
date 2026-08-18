@@ -1,6 +1,7 @@
 export { Button } from "./button";
 export { Badge } from "./badge";
 export type { BadgeProps } from "./badge";
+export { Checkbox } from "./checkbox";
 export { ConfirmDialog } from "./confirm-dialog";
 export type { ConfirmDialogProps } from "./confirm-dialog";
 export {
