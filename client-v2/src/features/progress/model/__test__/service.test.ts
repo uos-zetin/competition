@@ -8,7 +8,15 @@ import type { ProgressState } from "../types";
 const progress: ProgressState = {
   id: "division-1",
   competition: null,
-  division: { id: "division-1", competitionId: "competition-1", name: "A조", description: "", createdAt: new Date(), status: "ready", timeLimit: 60 },
+  division: {
+    id: "division-1",
+    competitionId: "competition-1",
+    name: "A조",
+    description: "",
+    createdAt: new Date(),
+    status: "ready",
+    timeLimit: 60,
+  },
   runner: null,
   nextRunners: [],
   topRecords: [],
@@ -16,16 +24,26 @@ const progress: ProgressState = {
 
 function createRepository(): ProgressRepository {
   return {
-    getProgress: vi.fn(), openProgressDivision: vi.fn(), closeProgressDivision: vi.fn(), resetProgressDivision: vi.fn(),
-    setCurrentRunner: vi.fn(), postponeCurrentRunner: vi.fn(),
+    getProgress: vi.fn(),
+    openProgressDivision: vi.fn(),
+    closeProgressDivision: vi.fn(),
+    resetProgressDivision: vi.fn(),
+    setCurrentRunner: vi.fn(),
+    postponeCurrentRunner: vi.fn(),
   };
 }
 
 function createChannel(): ProgressChannel & { emit(state: ProgressState): void } {
   let handler: ((state: ProgressState) => void) | undefined;
   return {
-    connect: vi.fn(), disconnect: vi.fn(),
-    subscribe: vi.fn((nextHandler) => { handler = nextHandler; return () => { handler = undefined; }; }),
+    connect: vi.fn(),
+    disconnect: vi.fn(),
+    subscribe: vi.fn((nextHandler) => {
+      handler = nextHandler;
+      return () => {
+        handler = undefined;
+      };
+    }),
     emit: (state) => handler?.(state),
   };
 }
@@ -36,7 +54,11 @@ describe("createProgressService", () => {
   it("loads a division progress snapshot into the local store", async () => {
     const repository = createRepository();
     vi.mocked(repository.getProgress).mockResolvedValue(progress);
-    await createProgressService({ progressRepository: repository, progressChannel: createChannel() }).load.byDivision("division-1");
+    const loaded = await createProgressService({
+      progressRepository: repository,
+      progressChannel: createChannel(),
+    }).load.byDivision("division-1");
+    expect(loaded).toEqual(progress);
     expect(useProgressStore.getState().progress).toEqual(progress);
   });
 
@@ -88,7 +110,12 @@ describe("createProgressService", () => {
   it("does not reset a newer connection while a previous disconnect is pending", async () => {
     const channel = createChannel();
     let resolveDisconnect: (() => void) | undefined;
-    vi.mocked(channel.disconnect).mockImplementation(() => new Promise<void>((resolve) => { resolveDisconnect = resolve; }));
+    vi.mocked(channel.disconnect).mockImplementation(
+      () =>
+        new Promise<void>((resolve) => {
+          resolveDisconnect = resolve;
+        })
+    );
     const service = createProgressService({ progressRepository: createRepository(), progressChannel: channel });
 
     await service.connection.connect("division-1");

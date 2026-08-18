@@ -26,6 +26,8 @@ coverage
 
 *.md
 !README.md
+!docs/
+!docs/**
 
 .env*
 !.env.development

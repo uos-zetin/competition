@@ -13,6 +13,7 @@ import {
   divisionService,
 } from "@/entities/division";
 import { useAdminAuthorization } from "@/features/auth";
+import { PromoteParticipantsDialog } from "@/features/participant-promotion";
 import { AdminNavShell } from "@/widgets/admin-layout";
 import { AppHeader, PageContainer } from "@/widgets/layout";
 
@@ -29,12 +30,14 @@ export function AdminDivisionsPage() {
   const competitionId = searchParams.get("competitionId") ?? "";
   const competitions = competitionService.use.competitions();
   const divisions = divisionService.use.divisionsByCompetition(competitionId);
-  const selectedCompetitionName = competitions.find((competition) => competition.id === competitionId)?.name ?? "알 수 없는 대회";
+  const selectedCompetitionName =
+    competitions.find((competition) => competition.id === competitionId)?.name ?? "알 수 없는 대회";
   const [formDialogOpen, setFormDialogOpen] = useState(false);
   const [editingDivision, setEditingDivision] = useState<Division | null>(null);
   const [creatingForCompetition, setCreatingForCompetition] = useState<CreatingForCompetition | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deletingDivision, setDeletingDivision] = useState<Division | null>(null);
+  const [promotionDialogOpen, setPromotionDialogOpen] = useState(false);
 
   const openCreateDialog = () => {
     if (!competitionId) return;
@@ -66,9 +69,20 @@ export function AdminDivisionsPage() {
               <h2 className="text-[1.375rem] font-bold">부문 관리</h2>
               <p className="mt-1.5 text-sm text-muted-foreground">부문을 생성, 수정, 삭제할 수 있습니다</p>
             </div>
-            <Button type="button" disabled={!competitionId} onClick={openCreateDialog}>
-              <Plus aria-hidden="true" />부문 생성
-            </Button>
+            <div className="flex flex-wrap gap-2">
+              <Button type="button" disabled={!competitionId} onClick={openCreateDialog}>
+                <Plus aria-hidden="true" />
+                부문 생성
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                disabled={!competitionId || divisions.length <= 1}
+                onClick={() => setPromotionDialogOpen(true)}
+              >
+                기존 부문에서 선택해서 만들기
+              </Button>
+            </div>
           </div>
 
           <CompetitionPicker
@@ -78,20 +92,26 @@ export function AdminDivisionsPage() {
           />
 
           {!competitionId ? (
-            <EmptyState
-              title="대회를 선택해주세요"
-              description="먼저 대회를 선택한 후 부문을 관리할 수 있습니다."
-            />
+            <EmptyState title="대회를 선택해주세요" description="먼저 대회를 선택한 후 부문을 관리할 수 있습니다." />
           ) : divisions.length === 0 ? (
             <EmptyState
               title="부문이 없습니다"
               description="선택된 대회에 아직 부문이 없습니다. 새로운 부문을 생성해보세요."
-              action={<Button type="button" variant="outline" onClick={openCreateDialog}><Plus aria-hidden="true" />첫 번째 부문 생성하기</Button>}
+              action={
+                <Button type="button" variant="outline" onClick={openCreateDialog}>
+                  <Plus aria-hidden="true" />첫 번째 부문 생성하기
+                </Button>
+              }
             />
           ) : (
             <div className="flex flex-col gap-3.5">
               {divisions.map((division) => (
-                <DivisionCard key={division.id} division={division} onEdit={openEditDialog} onDelete={openDeleteDialog} />
+                <DivisionCard
+                  key={division.id}
+                  division={division}
+                  onEdit={openEditDialog}
+                  onDelete={openDeleteDialog}
+                />
               ))}
             </div>
           )}
@@ -109,6 +129,13 @@ export function AdminDivisionsPage() {
       ) : null}
       {deletingDivision ? (
         <DivisionDeleteDialog division={deletingDivision} open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen} />
+      ) : null}
+      {competitionId ? (
+        <PromoteParticipantsDialog
+          competitionId={competitionId}
+          open={promotionDialogOpen}
+          onOpenChange={setPromotionDialogOpen}
+        />
       ) : null}
     </>
   );
